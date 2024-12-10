@@ -22,8 +22,8 @@ public class RoutineService {
             throw new IllegalArgumentException("해당 날짜의 루틴을 찾을 수 없습니다.");
         }
 
-        return routines.get(0);  // 첫 번째 루틴 반환
+        return routines.get(0);
     }
 
-    // 기타 서비스 메서드...
+
 }

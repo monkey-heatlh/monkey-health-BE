@@ -4,6 +4,7 @@ import com.monkey_company.monkey_health.domain.Member;
 import com.monkey_company.monkey_health.repository.MemberRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
@@ -12,13 +13,16 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class MemberService {
 
+
     private final MemberRepository memberRepository;
+    private final BCryptPasswordEncoder passwordEncoder;
 
     @Transactional
     public Member registerMember(String email, String password) {
+        String encodedPassword = passwordEncoder.encode(password);
         Member member = Member.builder()
                 .email(email)
-                .password(password)
+                .password(encodedPassword)
                 .build();
 
         return memberRepository.save(member);
@@ -35,7 +39,7 @@ public class MemberService {
     public Member login(String email, String password) {
         Member member = memberRepository.findMemberByEmail(email)
                 .orElseThrow(() -> new IllegalArgumentException("해당 이메일로 가입된 회원이 없습니다."));
-        if (!member.getPassword().equals(password)) {
+        if (!passwordEncoder.matches(password, member.getPassword())) {
             throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
         }
         return member;

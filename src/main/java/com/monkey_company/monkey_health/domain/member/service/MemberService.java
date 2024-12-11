@@ -18,27 +18,6 @@ public class MemberService {
     private final BCryptPasswordEncoder passwordEncoder;
 
     @Transactional
-    public Member registerMember(String email, String password) {
-        // 이메일 중복 확인
-        if (memberRepository.findByEmail(email).isPresent()) {
-            throw new IllegalArgumentException("이미 가입된 이메일입니다");
-        }
-
-        // 비밀번호 암호화
-        String encodedPassword = passwordEncoder.encode(password);
-
-        // 회원 생성 및 저장
-        Member member = Member.builder()
-                .email(email)
-                .password(encodedPassword)
-                .build();
-
-        return memberRepository.save(member);
-    }
-
-
-
-    @Transactional
     public void updateProfilePath(UUID memberId, String profilePath) {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 ID의 회원을 찾을 수 없습니다: " + memberId));

@@ -41,7 +41,7 @@ public class AuthService {
                 .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다."));
 
         // 비밀번호 검증
-        if (!passwordEncoder.matches(request.getPassword(), member.getPassword())) {
+        if (!passwordEncoder.matches(request.getPassword(), request.getPassword())) {
             throw new RuntimeException("비밀번호가 일치하지 않습니다.");
         }
 

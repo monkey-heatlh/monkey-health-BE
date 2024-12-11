@@ -31,7 +31,8 @@ public class AuthController {
     // 로그인
     @PostMapping("/login")
     public LoginResponse loginResponse(@RequestBody AuthRequest request) {
-        return new LoginResponse(authService.login(request));
+        String token = authService.login(request);
+        return new LoginResponse(token);
     }
 
 }

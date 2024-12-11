@@ -4,6 +4,7 @@ import com.monkey_company.monkey_health.domain.member.entity.Member;
 import com.monkey_company.monkey_health.global.security.auth.dto.request.AuthRequest;
 import com.monkey_company.monkey_health.global.security.auth.dto.response.LoginResponse;
 import com.monkey_company.monkey_health.global.security.auth.repository.AuthRepository;
+import com.monkey_company.monkey_health.global.security.jwt.JwtProvider;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -15,6 +16,7 @@ public class AuthService {
 
     private final AuthRepository authRepository;
     private final BCryptPasswordEncoder passwordEncoder;
+    private final JwtProvider jwtProvider;
 
     @Transactional
     public Member register(AuthRequest request) {
@@ -35,7 +37,7 @@ public class AuthService {
         return authRepository.save(member);
     }
 
-    public LoginResponse login(AuthRequest request) {
+    public String login(AuthRequest request) {
         // 이메일을 사용하여 회원 정보 조회
         Member member = authRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다."));
@@ -46,7 +48,7 @@ public class AuthService {
         }
 
         // JWT 토큰 생성
-        String token = jwtProvider.createToken(member.getEmail(), member.getRoles());
+        String token = jwtProvider.createToken(request.getEmail());
         return new LoginResponse(token);
     }
 

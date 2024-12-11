@@ -37,13 +37,13 @@ public class AuthService {
         return authRepository.save(member);
     }
 
-    public String login(AuthRequest request) {
+    public LoginResponse login(AuthRequest request) {
         // 이메일을 사용하여 회원 정보 조회
         Member member = authRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다."));
 
         // 비밀번호 검증
-        if (!passwordEncoder.matches(request.getPassword(), request.getPassword())) {
+        if (!passwordEncoder.matches(request.getPassword(), member.getPassword())) {
             throw new RuntimeException("비밀번호가 일치하지 않습니다.");
         }
 
@@ -51,5 +51,6 @@ public class AuthService {
         String token = jwtProvider.createToken(request.getEmail());
         return new LoginResponse(token);
     }
+
 
 }

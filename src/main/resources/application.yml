@@ -8,3 +8,10 @@ spring:
         hibernate:
             ddl-auto: update
         show-sql: true
+
+    jwt:
+        secret: qwrmlasfmlqw2491u4291urjeiqowfjkwklfnlksdnfi13fnou3nounf13
+        refreshSecret: anotherSecretKey
+        accessExp: 3600
+        refreshExp: 7200
+

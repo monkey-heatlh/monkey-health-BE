@@ -1,8 +1,6 @@
 package com.monkey_company.monkey_health.domain.member.controller;
 
 import com.monkey_company.monkey_health.domain.member.dto.request.MemberProfilePathRequest;
-import com.monkey_company.monkey_health.domain.member.dto.request.MemberRequest;
-import com.monkey_company.monkey_health.domain.member.dto.response.MemberRegisterResponse;
 import com.monkey_company.monkey_health.domain.member.dto.response.MemberResponse;
 import com.monkey_company.monkey_health.domain.member.entity.Member;
 import com.monkey_company.monkey_health.domain.member.service.MemberService;

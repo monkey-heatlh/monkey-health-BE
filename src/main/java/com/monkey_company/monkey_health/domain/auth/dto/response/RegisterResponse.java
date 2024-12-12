@@ -1,4 +1,4 @@
-package com.monkey_company.monkey_health.global.security.auth.dto.response;
+package com.monkey_company.monkey_health.domain.auth.dto.response;
 
 import lombok.Getter;
 

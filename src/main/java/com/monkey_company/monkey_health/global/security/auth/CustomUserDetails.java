@@ -2,18 +2,31 @@ package com.monkey_company.monkey_health.global.security.auth;
 
 
 import com.monkey_company.monkey_health.domain.member.entity.Member;
-import lombok.Getter;
-import lombok.Setter;
-import org.springframework.security.core.authority.AuthorityUtils;
-import org.springframework.security.core.userdetails.User;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
-@Getter
-@Setter
-public class CustomUserDetails extends User {
-    private Member member;
+import java.util.Collection;
+import java.util.Collections;
 
-    public CustomUserDetails(Member member) {
-        super(member.getEmail(), member.getPassword(), AuthorityUtils.NO_AUTHORITIES);
-        this.member = member;
+@RequiredArgsConstructor
+public class CustomUserDetails implements UserDetails {
+
+    private final Member member;
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return Collections.emptyList();
     }
+
+    @Override
+    public String getUsername() {
+        return String.valueOf(member.getEmail());
+    }
+
+    @Override
+    public String getPassword() {
+        return null;
+    }
+
 }

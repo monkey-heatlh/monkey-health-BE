@@ -5,7 +5,8 @@ import com.monkey_company.monkey_health.domain.auth.dto.request.AuthRequest;
 import com.monkey_company.monkey_health.domain.auth.dto.response.LoginResponse;
 import com.monkey_company.monkey_health.domain.auth.dto.response.RegisterResponse;
 import com.monkey_company.monkey_health.domain.auth.service.AuthService;
-import jakarta.servlet.http.HttpSession;
+import com.monkey_company.monkey_health.domain.auth.service.ReissueTokenService;
+import com.monkey_company.monkey_health.global.security.jwt.dto.JwtToken;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController {
 
     private final AuthService authService;
+    private final ReissueTokenService reissueTokenService;
 
     // 회원 가입
     @PostMapping("/register")
@@ -24,8 +26,20 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public LoginResponse login(@RequestBody AuthRequest request, HttpSession session) {
-        return authService.login(request, session);
+    public LoginResponse login(@RequestBody AuthRequest request) {
+        return authService.login(request);
+    }
+
+    @PostMapping("/reissue")
+    public LoginResponse reissueToken(@RequestHeader("Authorization") String authorizationHeader) {
+        // Authorization 헤더에서 Bearer 토큰을 가져옵니다.
+        String refreshToken = authorizationHeader.replace("Bearer ", "");
+
+        // refreshToken을 기반으로 새로운 토큰을 재발급합니다.
+        JwtToken jwtToken = reissueTokenService.execute(refreshToken);
+
+        // 새 토큰을 반환합니다.
+        return new LoginResponse("Token reissued successfully", jwtToken);
     }
 
 

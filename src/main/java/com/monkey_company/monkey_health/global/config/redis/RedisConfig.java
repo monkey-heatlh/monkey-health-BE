@@ -28,14 +28,10 @@ public class RedisConfig {
     }
 
     @Bean
-    public RedisTemplate<String, RefreshToken> redisTemplate() {
-        RedisTemplate<String, RefreshToken> redisTemplate = new RedisTemplate<>();
+    public RedisTemplate<String, String> redisTemplate() {
+        RedisTemplate<String, String> redisTemplate = new RedisTemplate<>();
         redisTemplate.setKeySerializer(new StringRedisSerializer());
-
-        // Jackson2JsonRedisSerializer를 사용하여 객체 직렬화
-        Jackson2JsonRedisSerializer<RefreshToken> serializer = new Jackson2JsonRedisSerializer<>(RefreshToken.class);
-        redisTemplate.setValueSerializer(serializer);
-
+        redisTemplate.setValueSerializer(new StringRedisSerializer());
         redisTemplate.setConnectionFactory(redisConnectionFactory());
         return redisTemplate;
     }

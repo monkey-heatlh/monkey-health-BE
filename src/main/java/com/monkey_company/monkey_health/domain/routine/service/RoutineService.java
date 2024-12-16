@@ -15,8 +15,8 @@ public class RoutineService {
 
     private final RoutineRepository routineRepository;
 
-    public Routine getRoutineByMemberAndDate(UUID memberId, String date) {
-        List<Routine> routines = routineRepository.findByMemberIdAndDate(memberId, LocalDate.parse(date));
+    public Routine getRoutineByMemberAndDate(String email, String date) {
+        List<Routine> routines = routineRepository.findByEmailAndDate(email, LocalDate.parse(date));
 
         if (routines.isEmpty()) {
             throw new IllegalArgumentException("해당 날짜의 루틴을 찾을 수 없습니다.");

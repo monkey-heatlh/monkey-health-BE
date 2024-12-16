@@ -1,10 +1,11 @@
 package com.monkey_company.monkey_health.domain.auth.dto;
 
-import jakarta.persistence.Id;
+import org.springframework.data.annotation.Id;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import org.springframework.data.redis.core.RedisHash;
+import org.springframework.data.redis.core.TimeToLive;
 import org.springframework.data.redis.core.index.Indexed;
 
 @Getter
@@ -13,13 +14,13 @@ import org.springframework.data.redis.core.index.Indexed;
 @RedisHash(value = "refreshToken")
 public class RefreshToken {
 
-    @Id  // 반드시 @Id 어노테이션을 추가해야 합니다.
+    @Id
     @Indexed
-    private String token;  // token을 고유 식별자로 사용할 수 있습니다.
+    private Long userId;
 
     @Indexed
-    private Long userId;  // userId는 @Indexed로 추가하여 검색에 사용
+    private String token;
 
-    @Indexed
-    private int expirationTime;  // 만료 시간
+    @TimeToLive
+    private int ttl;
 }

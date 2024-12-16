@@ -9,6 +9,6 @@ import java.util.List;
 import java.util.UUID;
 
 @Repository
-public interface RoutineRepository extends JpaRepository<Routine, Integer> {
-    List<Routine> findByMemberIdAndDate(UUID memberId, LocalDate parse);
+public interface RoutineRepository extends JpaRepository<Routine, List> {
+    List<Routine> findByEmailAndDate(String email, LocalDate parse);
 }

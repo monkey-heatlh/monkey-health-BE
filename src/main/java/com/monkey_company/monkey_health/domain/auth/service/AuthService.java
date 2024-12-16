@@ -1,23 +1,27 @@
 package com.monkey_company.monkey_health.domain.auth.service;
 
-import com.monkey_company.monkey_health.domain.member.entity.Member;
 import com.monkey_company.monkey_health.domain.auth.dto.request.AuthRequest;
 import com.monkey_company.monkey_health.domain.auth.dto.response.LoginResponse;
 import com.monkey_company.monkey_health.domain.auth.repository.AuthRepository;
+import com.monkey_company.monkey_health.domain.member.entity.Member;
 import com.monkey_company.monkey_health.global.error.GlobalException;
+import com.monkey_company.monkey_health.global.security.jwt.TokenGenerator;
+import com.monkey_company.monkey_health.global.security.jwt.dto.JwtToken;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import jakarta.servlet.http.HttpSession;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class AuthService {
 
     private final AuthRepository authRepository;
     private final BCryptPasswordEncoder passwordEncoder;
+    private final TokenGenerator tokenGenerator;
 
     @Transactional
     public Member register(AuthRequest request) {
@@ -38,26 +42,19 @@ public class AuthService {
         return authRepository.save(member);
     }
 
-    public LoginResponse login(AuthRequest request, HttpSession session) {
-        // 이메일로 사용자를 찾고, 없으면 ExpectedException을 던짐
+    public LoginResponse login(AuthRequest request) {
         Member member = authRepository.findByEmail(request.getEmail())
-                .orElseThrow(() -> new GlobalException("사용자를 찾을 수 없습니다.", HttpStatus.NOT_FOUND));
-
-        // 비밀번호가 일치하는지 확인하고, 일치하지 않으면 ExpectedException을 던짐
+                .orElseThrow(() -> {
+                    log.error("사용자 이메일로 회원을 찾을 수 없습니다: {}", request.getEmail());
+                    return new GlobalException("사용자를 찾을 수 없습니다.", HttpStatus.NOT_FOUND);
+                });
         if (!passwordEncoder.matches(request.getPassword(), member.getPassword())) {
             throw new GlobalException("비밀번호가 일치하지 않습니다.", HttpStatus.UNAUTHORIZED);
         }
 
-        // 세션에 사용자 정보 저장
-        session.setAttribute("user", member);
+        JwtToken jwtToken = tokenGenerator.generateToken(member.getEmail());
 
         // 로그인 성공 응답
-        return new LoginResponse("로그인 성공");
+        return new LoginResponse("로그인 성공", jwtToken);
     }
-
-
-
-
-
-
 }

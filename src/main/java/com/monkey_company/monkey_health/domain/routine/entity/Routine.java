@@ -17,11 +17,10 @@ public class Routine {
     @Id
     @GeneratedValue
     @Column(name = "routine_id")
-    private Integer routineId;
+    private Long routineId;
 
-    @OneToOne
-    @JoinColumn(name = "member_id", nullable = false, updatable = false)
-    private Member member;
+    @JoinColumn(name = "email", nullable = false, updatable = false)
+    private String email;
 
     private String content;
 

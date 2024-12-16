@@ -31,7 +31,14 @@ public class ReissueTokenService {
         RefreshToken refreshToken = refreshTokenRepository.findByToken(removePrefixToken)
                 .orElseThrow(() -> new GlobalException("존재하지 않는 refresh token 입니다.", HttpStatus.NOT_FOUND));
 
-        String userId = tokenGenerator.getUserIdFromRefreshToken(refreshToken.getToken());
+        // Refresh token에서 유저 정보를 추출하는 부분에서 예외가 발생할 경우 이를 처리
+        String userId;
+        try {
+            userId = tokenGenerator.getUserIdFromRefreshToken(refreshToken.getToken());
+        } catch (Exception e) {
+            throw new GlobalException("Refresh token이 잘못되었거나 만료되었습니다.", HttpStatus.UNAUTHORIZED);
+        }
+
         isExistsUser(userId);
 
         JwtToken jwtToken = tokenGenerator.generateToken(userId);
@@ -39,6 +46,7 @@ public class ReissueTokenService {
 
         return jwtToken;
     }
+
 
     private void isExistsUser(String userId) {
         if (!memberRepository.existsById(Long.valueOf(userId))) {
@@ -56,7 +64,9 @@ public class ReissueTokenService {
         RefreshToken refreshToken = RefreshToken.builder()
                 .userId(userId)
                 .token(token)
-                .expirationTime(jwtEnv.refreshExp())
+                .ttl(jwtEnv.refreshExp())
                 .build();
+
+        refreshTokenRepository.save(refreshToken);
     }
 }

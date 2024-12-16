@@ -1,6 +1,6 @@
 package com.monkey_company.monkey_health.global.security.jwt;
 
-import com.monkey_company.monkey_health.global.security.jwt.dto.Token;
+import com.monkey_company.monkey_health.global.security.jwt.dto.JwtToken;
 import com.monkey_company.monkey_health.global.security.jwt.properties.JwtEnvironment;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -22,8 +22,8 @@ public class TokenGenerator {
     private final String ACCESS_TOKEN = "accessToken";
     private final String REFRESH_TOKEN = "refreshToken";
 
-    public Token generateToken(String email) {
-        return Token.builder()
+    public JwtToken generateToken(String email) {
+        return JwtToken.builder()
                 .accessToken(generateAccessToken(email))
                 .refreshToken(generateRefreshToken(email))
                 .accessTokenExp(jwtEnv.accessExp())

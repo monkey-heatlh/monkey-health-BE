@@ -1,10 +1,10 @@
 package com.monkey_company.monkey_health.domain.auth.service;
 
 import com.monkey_company.monkey_health.domain.member.entity.Member;
-import com.monkey_company.monkey_health.global.exception.error.ExpectedException;
 import com.monkey_company.monkey_health.domain.auth.dto.request.AuthRequest;
 import com.monkey_company.monkey_health.domain.auth.dto.response.LoginResponse;
 import com.monkey_company.monkey_health.domain.auth.repository.AuthRepository;
+import com.monkey_company.monkey_health.global.error.GlobalException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -23,7 +23,7 @@ public class AuthService {
     public Member register(AuthRequest request) {
         // 이메일 중복 확인
         if (authRepository.findByEmail(request.getEmail()).isPresent()) {
-            throw new ExpectedException("이미 가입된 이메일입니다", HttpStatus.CONFLICT);
+            throw new GlobalException("이미 가입된 이메일입니다", HttpStatus.CONFLICT);
         }
 
         // 비밀번호 암호화
@@ -41,11 +41,11 @@ public class AuthService {
     public LoginResponse login(AuthRequest request, HttpSession session) {
         // 이메일로 사용자를 찾고, 없으면 ExpectedException을 던짐
         Member member = authRepository.findByEmail(request.getEmail())
-                .orElseThrow(() -> new ExpectedException("사용자를 찾을 수 없습니다.", HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new GlobalException("사용자를 찾을 수 없습니다.", HttpStatus.NOT_FOUND));
 
         // 비밀번호가 일치하는지 확인하고, 일치하지 않으면 ExpectedException을 던짐
         if (!passwordEncoder.matches(request.getPassword(), member.getPassword())) {
-            throw new ExpectedException("비밀번호가 일치하지 않습니다.", HttpStatus.UNAUTHORIZED);
+            throw new GlobalException("비밀번호가 일치하지 않습니다.", HttpStatus.UNAUTHORIZED);
         }
 
         // 세션에 사용자 정보 저장

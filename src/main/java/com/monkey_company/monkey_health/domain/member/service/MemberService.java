@@ -18,7 +18,7 @@ public class MemberService {
     private final BCryptPasswordEncoder passwordEncoder;
 
     @Transactional
-    public void updateProfilePath(UUID memberId, String profilePath) {
+    public void updateProfilePath(Long memberId, String profilePath) {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 ID의 회원을 찾을 수 없습니다: " + memberId));
         member.setProfilePath(profilePath);
@@ -27,7 +27,7 @@ public class MemberService {
 
 
 
-    public Member getMemberById(UUID memberId) {
+    public Member getMemberById(Long memberId) {
         return memberRepository.findById(memberId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 ID의 회원을 찾을 수 없습니다: " + memberId));
     }

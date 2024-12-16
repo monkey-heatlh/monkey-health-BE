@@ -18,14 +18,14 @@ public class MemberController {
 
     // 프로필 경로 업데이트
     @PutMapping("/{memberId}/profile-path")
-    public MemberResponse updateProfilePath(@PathVariable UUID memberId, @RequestBody MemberProfilePathRequest request) {
+    public MemberResponse updateProfilePath(@PathVariable Long memberId, @RequestBody MemberProfilePathRequest request) {
         memberService.updateProfilePath(memberId, request.getProfilePath());
         return new MemberResponse("프로필 경로가 업데이트되었습니다", null);
     }
 
     // 회원 정보 조회
     @GetMapping("/{memberId}")
-    public MemberResponse getMemberInfo(@PathVariable UUID memberId) {
+    public MemberResponse getMemberInfo(@PathVariable Long memberId) {
         Member member = memberService.getMemberById(memberId);
         return new MemberResponse(member.getEmail(), member.getProfilePath());
     }

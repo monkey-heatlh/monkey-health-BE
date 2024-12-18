@@ -3,14 +3,16 @@ package com.monkey_company.monkey_health.domain.auth.controller;
 import com.monkey_company.monkey_health.domain.auth.dto.request.EmailVerificationRequest;
 import com.monkey_company.monkey_health.domain.auth.dto.request.EmailVerifyCodeRequest;
 import com.monkey_company.monkey_health.domain.auth.dto.request.LoginRequest;
-import com.monkey_company.monkey_health.domain.auth.dto.request.SignupRequest;
+import com.monkey_company.monkey_health.domain.auth.dto.request.SignUpRequest;
 import com.monkey_company.monkey_health.domain.auth.dto.response.EmailVerifyCodeResponse;
 import com.monkey_company.monkey_health.domain.auth.dto.response.EmailverificationResponse;
 import com.monkey_company.monkey_health.domain.auth.dto.response.LoginResponse;
-import com.monkey_company.monkey_health.domain.auth.dto.response.SignupResponse;
-import com.monkey_company.monkey_health.domain.auth.service.AuthService;
-import com.monkey_company.monkey_health.domain.auth.service.MailService;
+import com.monkey_company.monkey_health.domain.auth.dto.response.SignUpResponse;
 import com.monkey_company.monkey_health.domain.auth.service.ReissueTokenService;
+import com.monkey_company.monkey_health.domain.auth.service.LoginService;
+import com.monkey_company.monkey_health.domain.auth.service.VerifyCodeService;
+import com.monkey_company.monkey_health.domain.auth.service.impl.SendMailServiceImpl;
+import com.monkey_company.monkey_health.domain.auth.service.impl.SignUpServiceImpl;
 import com.monkey_company.monkey_health.global.security.jwt.dto.JwtToken;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -20,41 +22,35 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class AuthController {
 
-    private final AuthService authService;
+    private final VerifyCodeService verifyCodeService;
     private final ReissueTokenService reissueTokenService;
-    private final MailService mailService;
+    private final SendMailServiceImpl sendMailService;
+    private final SignUpServiceImpl signUpService;
+    private final LoginService loginService;
 
-    private int number;
 
     // 이메일 인증 번호 발송
     @PostMapping("/send-code")
     public EmailverificationResponse sendCode(@RequestBody EmailVerificationRequest request) {
-        authService.sendVerificationCode(request.getEmail());
-        return new EmailverificationResponse("인증 번호가 발송되었습니다.");
+        return sendMailService.sendMail(request.getEmail());
     }
 
     // 이메일 인증 번호 검증
     @PostMapping("/verify-code")
     public EmailVerifyCodeResponse verifyCode(@RequestBody EmailVerifyCodeRequest request) {
-        // 인증 코드 검증 서비스 호출
-        authService.verifyCode(request.getEmail(), request.getCode());
-        return new EmailVerifyCodeResponse("인증 번호가 확인되었습니다.");
+        return verifyCodeService.verifyCode(request.getEmail(), request.getCode());
     }
 
     // 회원가입
     @PostMapping("/signup")
-    public SignupResponse register(@RequestBody SignupRequest request) {
-        authService.register(request);
-        return new  SignupResponse("회원가입이 완료되었습니다.");
+    public SignUpResponse register(@RequestBody SignUpRequest request) {
+        return signUpService.signUp(request);
     }
-
-
 
     // 로그인
     @PostMapping("/login")
     public LoginResponse login(@RequestBody LoginRequest request) {
-        // 로그인 서비스 호출
-        return authService.login(request);
+        return loginService.login(request);
     }
 
     // 토큰 재발급

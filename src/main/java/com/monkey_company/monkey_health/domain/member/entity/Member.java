@@ -32,4 +32,9 @@ public class Member {
         this.profilePath = profilePath;
     }
 
+    public Member(String email, String password) {
+        this.email = email;
+        this.password = password;
+    }
+
 }

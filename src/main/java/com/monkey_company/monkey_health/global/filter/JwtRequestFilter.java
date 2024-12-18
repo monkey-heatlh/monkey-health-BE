@@ -24,8 +24,16 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        String accessToken = request.getHeader(AUTHORIZATION_HEADER);
 
+        String requestURI = request.getRequestURI();
+        System.out.println("Request URI: " + requestURI);
+
+        if (requestURI.startsWith("/auth/")) {
+            filterChain.doFilter(request, response); // 다음 필터로 요청 전달
+            return;
+        }
+
+        String accessToken = request.getHeader(AUTHORIZATION_HEADER);
         if (accessToken != null) {
             accessToken = accessToken.replaceFirst(BEARER_PREFIX, "").trim();
 

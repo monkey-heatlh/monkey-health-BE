@@ -14,8 +14,5 @@ public class RoutineController {
 
     private final RoutineService routineService;
 
-    @GetMapping("/{email}/date/{date}")
-    public Routine getRoutineByMemberAndDate(@PathVariable String email, @PathVariable String date) {
-        return routineService.getRoutineByMemberAndDate(email, date);
-    }
+    //public
 }

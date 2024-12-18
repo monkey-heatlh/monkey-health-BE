@@ -1,6 +1,6 @@
 package com.monkey_company.monkey_health.domain.auth.service;
 
-import com.monkey_company.monkey_health.domain.auth.dto.RefreshToken;
+import com.monkey_company.monkey_health.domain.auth.entity.RefreshToken;
 import com.monkey_company.monkey_health.domain.auth.repository.RefreshTokenRepository;
 import com.monkey_company.monkey_health.domain.member.repository.MemberRepository;
 import com.monkey_company.monkey_health.global.error.GlobalException;
@@ -25,6 +25,7 @@ public class ReissueTokenService {
 
     @Transactional
     public JwtToken execute(String token) {
+
         isNotNullRefreshToken(token);
 
         String removePrefixToken = token.replaceFirst(BEARER_PREFIX, "").trim();

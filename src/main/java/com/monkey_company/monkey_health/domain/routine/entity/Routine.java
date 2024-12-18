@@ -1,10 +1,10 @@
 package com.monkey_company.monkey_health.domain.routine.entity;
 
-import com.monkey_company.monkey_health.domain.member.entity.Member;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -12,17 +12,25 @@ import java.time.LocalDate;
 @Entity
 @Getter
 @Builder
+@Table(name = "routine")
 public class Routine {
 
     @Id
-    @GeneratedValue
-    @Column(name = "routine_id")
-    private Long routineId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    @JoinColumn(name = "email", nullable = false, updatable = false)
     private String email;
 
-    private String content;
+    private RoutineContent mondayContent;
 
-    private LocalDate date;
+    private RoutineContent tuesdayContent;
+
+    private RoutineContent wednesdayContent;
+
+    private RoutineContent thursdayContent;
+
+    private RoutineContent fridayContent;
+
+
+
 }

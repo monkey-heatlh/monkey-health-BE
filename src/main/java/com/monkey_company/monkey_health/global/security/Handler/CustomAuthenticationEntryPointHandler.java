@@ -31,7 +31,7 @@ public class CustomAuthenticationEntryPointHandler implements AuthenticationEntr
         response.setStatus(HttpStatus.UNAUTHORIZED.value());
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.getWriter().write(objectMapper.writeValueAsString(
-                new ErrorResponse("인증에 실패했습니다.")
+                new ErrorResponse("jwt 인증에 실패했습니다.")
         ));
     }
 }

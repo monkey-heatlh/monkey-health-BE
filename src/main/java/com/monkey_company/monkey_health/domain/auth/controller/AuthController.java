@@ -7,7 +7,7 @@ import com.monkey_company.monkey_health.domain.auth.dto.request.SignupRequest;
 import com.monkey_company.monkey_health.domain.auth.dto.response.EmailVerifyCodeResponse;
 import com.monkey_company.monkey_health.domain.auth.dto.response.EmailverificationResponse;
 import com.monkey_company.monkey_health.domain.auth.dto.response.LoginResponse;
-import com.monkey_company.monkey_health.domain.auth.dto.response.RegisterResponse;
+import com.monkey_company.monkey_health.domain.auth.dto.response.SignupResponse;
 import com.monkey_company.monkey_health.domain.auth.service.AuthService;
 import com.monkey_company.monkey_health.domain.auth.service.MailService;
 import com.monkey_company.monkey_health.domain.auth.service.ReissueTokenService;
@@ -30,7 +30,7 @@ public class AuthController {
     @PostMapping("/send-code")
     public EmailverificationResponse sendCode(@RequestBody EmailVerificationRequest request) {
         authService.sendVerificationCode(request.getEmail());
-        return new EmailverificationResponse("인증 번호가 발송되었습니다");
+        return new EmailverificationResponse("인증 번호가 발송되었습니다.");
     }
 
     // 이메일 인증 번호 검증
@@ -38,15 +38,17 @@ public class AuthController {
     public EmailVerifyCodeResponse verifyCode(@RequestBody EmailVerifyCodeRequest request) {
         // 인증 코드 검증 서비스 호출
         authService.verifyCode(request.getEmail(), request.getCode());
-        return new EmailVerifyCodeResponse("인증 번호가 확인되었습니다");
+        return new EmailVerifyCodeResponse("인증 번호가 확인되었습니다.");
     }
 
     // 회원가입
     @PostMapping("/signup")
-    public RegisterResponse registerMember(@RequestBody SignupRequest request) {
+    public SignupResponse register(@RequestBody SignupRequest request) {
         authService.register(request);
-        return new RegisterResponse("회원가입 되었습니다.");
+        return new  SignupResponse("회원가입이 완료되었습니다.");
     }
+
+
 
     // 로그인
     @PostMapping("/login")

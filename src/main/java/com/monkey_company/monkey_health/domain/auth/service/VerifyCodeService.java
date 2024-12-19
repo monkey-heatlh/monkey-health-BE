@@ -1,7 +1,6 @@
 package com.monkey_company.monkey_health.domain.auth.service;
 
 import com.monkey_company.monkey_health.domain.auth.dto.response.EmailVerifyCodeResponse;
-import com.monkey_company.monkey_health.domain.auth.dto.response.EmailverificationResponse;
 import com.monkey_company.monkey_health.global.error.GlobalException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;

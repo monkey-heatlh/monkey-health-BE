@@ -46,11 +46,9 @@ public class SecurityConfig {
         http.sessionManagement(sessionManagement -> sessionManagement
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
-        // 필터 순서 명확히 지정
         http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
         http.addFilterBefore(exceptionHandlerFilter, JwtRequestFilter.class);
 
-        // 경로 권한 설정
         http.authorizeHttpRequests(httpRequests -> httpRequests
                 .requestMatchers("/auth/**").permitAll()
                 .anyRequest().authenticated());
@@ -61,6 +59,8 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
+
+        // 나중에 변경 예정
         configuration.setAllowedOrigins(List.of("*"));
         configuration.setAllowedMethods(Arrays.asList(
                 HttpMethod.GET.name(),

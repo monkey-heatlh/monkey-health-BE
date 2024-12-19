@@ -5,6 +5,8 @@ import com.monkey_company.monkey_health.domain.auth.dto.response.SignUpResponse;
 import com.monkey_company.monkey_health.domain.auth.service.SignUpService;
 import com.monkey_company.monkey_health.domain.member.entity.Member;
 import com.monkey_company.monkey_health.domain.member.repository.MemberRepository;
+import com.monkey_company.monkey_health.domain.routine.entity.Routine;
+import com.monkey_company.monkey_health.domain.routine.repository.RoutineRepository;
 import com.monkey_company.monkey_health.global.error.GlobalException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -21,12 +23,12 @@ public class SignUpServiceImpl implements SignUpService {
     private final RedisTemplate<String, String> redisTemplate;
     private final MemberRepository memberRepository;
     private final BCryptPasswordEncoder passwordEncoder;
+    private final RoutineRepository routineRepository;
 
     @Transactional
     @Override
     public SignUpResponse signUp(@Valid SignUpRequest request) {
         checkEmailVerified(request);
-        String encodedPassword = passwordEncoder.encode(request.getPassword());
         Member newMember = createMember(request);
         memberRepository.save(newMember);
         return new SignUpResponse("회원가입이 완료되었습니다.");
@@ -42,6 +44,10 @@ public class SignUpServiceImpl implements SignUpService {
 
     private Member createMember(SignUpRequest request) {
         String encodedPassword = passwordEncoder.encode(request.getPassword());
+        Routine routine = Routine.builder()
+                .email(request.getEmail())
+                .build();
+        routineRepository.save(routine);
         return new Member(
                 request.getEmail(),
                 encodedPassword

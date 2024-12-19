@@ -11,8 +11,6 @@ public class RoutineResponse {
 
     private String message;
 
-
-
     public RoutineResponse(String message) {
         this.message = message;
     }

@@ -13,22 +13,20 @@ import java.util.List;
 @Getter
 @Builder
 @Table(name = "routine")
+@Setter
 public class Routine {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
     private String email;
-
+    @Enumerated(EnumType.STRING)
     private RoutineContent mondayContent;
-
+    @Enumerated(EnumType.STRING)
     private RoutineContent tuesdayContent;
-
+    @Enumerated(EnumType.STRING)
     private RoutineContent wednesdayContent;
-
+    @Enumerated(EnumType.STRING)
     private RoutineContent thursdayContent;
-
+    @Enumerated(EnumType.STRING)
     private RoutineContent fridayContent;
 
 

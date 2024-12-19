@@ -1,7 +1,5 @@
 package com.monkey_company.monkey_health.domain.auth.dto.request;
 
-import com.monkey_company.monkey_health.domain.auth.dto.response.EmailVerifyCodeResponse;
-import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;

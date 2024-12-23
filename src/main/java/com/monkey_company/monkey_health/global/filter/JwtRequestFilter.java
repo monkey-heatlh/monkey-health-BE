@@ -20,24 +20,16 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     private final TokenParser tokenParser;
 
     public static String AUTHORIZATION_HEADER = "Authorization";
-    public static String BEARER_PREFIX = "Bearer";
+    public static String BEARER_PREFIX = "Bearer ";
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-
-        String requestURI = request.getRequestURI();
-        System.out.println("Request URI: " + requestURI);
-
-        if (requestURI.startsWith("/auth/")) {
-            filterChain.doFilter(request, response);
-            return;
-        }
-
         String accessToken = request.getHeader(AUTHORIZATION_HEADER);
+
         if (accessToken != null) {
             accessToken = accessToken.replaceFirst(BEARER_PREFIX, "").trim();
 
-            UsernamePasswordAuthenticationToken authentication = tokenParser.authenticationToken(accessToken);
+            UsernamePasswordAuthenticationToken authentication = tokenParser.authenticate(accessToken);
             SecurityContextHolder.clearContext();
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }

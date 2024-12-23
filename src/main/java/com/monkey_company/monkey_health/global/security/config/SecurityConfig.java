@@ -3,6 +3,7 @@ package com.monkey_company.monkey_health.global.security.config;
 import com.monkey_company.monkey_health.global.filter.ExceptionHandlerFilter;
 import com.monkey_company.monkey_health.global.filter.JwtRequestFilter;
 import com.monkey_company.monkey_health.global.security.Handler.CustomAccessDeniedHandler;
+import com.monkey_company.monkey_health.global.security.Handler.CustomAuthenticationEntryPointHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,7 +17,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import com.monkey_company.monkey_health.global.security.Handler.CustomAuthenticationEntryPointHandler;
 
 import java.util.Arrays;
 import java.util.List;

@@ -3,9 +3,6 @@ package com.monkey_company.monkey_health.domain.routine.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.LocalDate;
-import java.util.List;
-
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
@@ -17,18 +14,21 @@ import java.util.List;
 public class Routine {
 
     @Id
+    @Column(name = "email", nullable = false, unique = true)
     private String email;
-    @Enumerated(EnumType.STRING)
-    private RoutineContent mondayContent;
-    @Enumerated(EnumType.STRING)
-    private RoutineContent tuesdayContent;
-    @Enumerated(EnumType.STRING)
-    private RoutineContent wednesdayContent;
-    @Enumerated(EnumType.STRING)
-    private RoutineContent thursdayContent;
-    @Enumerated(EnumType.STRING)
-    private RoutineContent fridayContent;
 
+    @Column(name = "monday_content")
+    private String mondayContent;
 
+    @Column(name = "tuesday_content")
+    private String tuesdayContent;
 
+    @Column(name = "wednesday_content")
+    private String wednesdayContent;
+
+    @Column(name = "thursday_content")
+    private String thursdayContent;
+
+    @Column(name = "friday_content")
+    private String fridayContent;
 }

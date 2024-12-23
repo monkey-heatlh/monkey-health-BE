@@ -46,6 +46,9 @@ dependencies {
 
 	implementation 'com.fasterxml.jackson.core:jackson-databind:2.15.2'
 	implementation 'com.fasterxml.jackson.annotation:jackson-annotations:2.15.2'
+	implementation 'javax.annotation:javax.annotation-api:1.3.2'
+
+
 }
 
 tasks.named('test') {

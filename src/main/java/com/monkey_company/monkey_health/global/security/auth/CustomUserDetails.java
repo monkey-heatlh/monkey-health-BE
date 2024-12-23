@@ -1,6 +1,5 @@
 package com.monkey_company.monkey_health.global.security.auth;
 
-
 import com.monkey_company.monkey_health.domain.member.entity.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;

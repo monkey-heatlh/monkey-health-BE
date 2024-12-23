@@ -1,8 +1,7 @@
 package com.monkey_company.monkey_health.global.security.Handler;
 
-import com.monkey_company.monkey_health.global.error.ErrorResponse;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.monkey_company.monkey_health.global.error.ErrorResponse;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

@@ -14,16 +14,21 @@ import static com.monkey_company.monkey_health.global.security.jwt.TokenGenerato
 @RequiredArgsConstructor
 public class TokenParser {
 
-    private final JwtEnvironment jwtEvt;
+    private final JwtEnvironment jwtEnv;
 
     private final CustomUserDetailsService customUserDetailsService;
 
-    public UsernamePasswordAuthenticationToken authenticationToken(String accessToken) {
+    public UsernamePasswordAuthenticationToken authenticate(String accessToken) {
         UserDetails userDetails = customUserDetailsService.loadUserByUsername(getAccessTokenSubject(accessToken));
         return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
     }
 
     private String getAccessTokenSubject(String accessToken) {
-        return getTokenBody(accessToken, Keys.hmacShaKeyFor(jwtEvt.accessSecret().getBytes())).getSubject();
+        return getTokenBody(accessToken, Keys.hmacShaKeyFor(jwtEnv.accessSecret().getBytes())).getSubject();
     }
+
+    public String getEmailFromToken(String accessToken) {
+        return getAccessTokenSubject(accessToken);
+    }
+
 }

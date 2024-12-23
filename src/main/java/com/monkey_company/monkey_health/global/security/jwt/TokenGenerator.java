@@ -4,9 +4,10 @@ import com.monkey_company.monkey_health.global.security.jwt.dto.JwtToken;
 import com.monkey_company.monkey_health.global.security.jwt.properties.JwtEnvironment;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
@@ -23,7 +24,19 @@ public class TokenGenerator {
     private final String ACCESS_TOKEN = "accessToken";
     private final String REFRESH_TOKEN = "refreshToken";
 
-    private final SecretKey key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
+    @Value("${ACCESS_SECRET}")
+    private String secretKey;
+
+    private SecretKey key;
+
+    @PostConstruct
+    public void init() {
+        if (secretKey != null && !secretKey.isEmpty()) {
+            this.key = Keys.hmacShaKeyFor(secretKey.getBytes());
+        } else {
+            throw new IllegalArgumentException("ACCESS_SECRET 값이 비어 있습니다.");
+        }
+    }
 
     public JwtToken generateToken(String email) {
         return JwtToken.builder()

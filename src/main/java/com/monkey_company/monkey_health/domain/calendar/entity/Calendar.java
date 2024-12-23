@@ -15,13 +15,9 @@ import java.time.LocalDate;
 public class Calendar {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // 기본키 자동 생성
-    @Column(name = "calendar_id") // 기본키 컬럼
-    private Long id;
+    private String email;
 
-    @Column(name = "calendar_date", nullable = false)
     private LocalDate date; // 날짜는 중복 가능
 
-    @Column(name = "calendar_content", nullable = false, length = 500) // 길이 제한 추가
     private String content; // 같은 날짜에 여러 콘텐츠 가능
 }

@@ -2,18 +2,18 @@ package com.monkey_company.monkey_health.domain.auth.service;
 
 import com.monkey_company.monkey_health.domain.auth.dto.request.LoginRequest;
 import com.monkey_company.monkey_health.domain.auth.dto.response.LoginResponse;
+import com.monkey_company.monkey_health.domain.auth.entity.RefreshToken;
+import com.monkey_company.monkey_health.domain.auth.repository.RefreshTokenRepository;
 import com.monkey_company.monkey_health.domain.member.entity.Member;
 import com.monkey_company.monkey_health.domain.member.repository.MemberRepository;
-import com.monkey_company.monkey_health.domain.auth.entity.RefreshToken; // Import 추가
-import com.monkey_company.monkey_health.domain.auth.repository.RefreshTokenRepository; // Import 추가
 import com.monkey_company.monkey_health.global.error.GlobalException;
+import com.monkey_company.monkey_health.global.security.jwt.TokenGenerator;
+import com.monkey_company.monkey_health.global.security.jwt.dto.JwtToken;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import com.monkey_company.monkey_health.global.security.jwt.TokenGenerator;
-import com.monkey_company.monkey_health.global.security.jwt.dto.JwtToken;
 
 @Slf4j
 @Service

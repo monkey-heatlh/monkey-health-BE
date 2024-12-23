@@ -1,6 +1,5 @@
 package com.monkey_company.monkey_health.domain.routine.dto.response;
 
-import com.monkey_company.monkey_health.domain.routine.entity.RoutineContent;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,9 +9,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ReadAllRoutineResponse {
 
-    private RoutineContent mondayContent;
-    private RoutineContent tuesdayContent;
-    private RoutineContent wednesdayContent;
-    private RoutineContent thursdayContent;
-    private RoutineContent fridayContent;
+    private String mondayContent;
+    private String tuesdayContent;
+    private String wednesdayContent;
+    private String thursdayContent;
+    private String fridayContent;
 }

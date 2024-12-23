@@ -10,6 +10,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class ReadAllRoutineServiceImpl implements ReadAllRoutineService {
@@ -21,7 +23,24 @@ public class ReadAllRoutineServiceImpl implements ReadAllRoutineService {
     public ReadAllRoutineResponse readAllRoutine(String token) {
         String email = tokenParser.getEmailFromToken(token);
         Routine routine = routineRepository.findByEmail(email)
-                .orElseThrow(() -> new GlobalException("루틴을 찾을 수 없습니다.", HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new GlobalException("루틴을 찾을 수 없습니다", HttpStatus.NOT_FOUND));
+
+        if (isRoutineEmpty(routine)) {
+            throw new GlobalException("루틴을 찾을 수 없습니다", HttpStatus.NOT_FOUND);
+        }
+
+        return createReadAllRoutineResponse(routine);
+    }
+
+    private boolean isRoutineEmpty(Routine routine) {
+        return routine.getMondayContent() == null &&
+                routine.getTuesdayContent() == null &&
+                routine.getWednesdayContent() == null &&
+                routine.getThursdayContent() == null &&
+                routine.getFridayContent() == null;
+    }
+
+    private ReadAllRoutineResponse createReadAllRoutineResponse(Routine routine) {
         return new ReadAllRoutineResponse(
                 routine.getMondayContent(),
                 routine.getTuesdayContent(),
@@ -30,6 +49,5 @@ public class ReadAllRoutineServiceImpl implements ReadAllRoutineService {
                 routine.getFridayContent()
         );
     }
-
 
 }

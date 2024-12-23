@@ -15,9 +15,16 @@ import java.time.LocalDate;
 public class Calendar {
 
     @Id
-    private String email;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    private LocalDate date; // 날짜는 중복 가능
+    @Column(nullable = false)
+    private String content;
 
-    private String content; // 같은 날짜에 여러 콘텐츠 가능
+    @Column(nullable = false)
+    private LocalDate date;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private CalendarUser user; // 작성자
 }

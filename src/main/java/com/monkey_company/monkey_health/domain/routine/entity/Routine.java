@@ -10,7 +10,6 @@ import lombok.*;
 @Getter
 @Builder
 @Table(name = "routine")
-@Setter
 public class Routine {
 
     @Id

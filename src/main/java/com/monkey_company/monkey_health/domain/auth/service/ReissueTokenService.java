@@ -28,23 +28,18 @@ public class ReissueTokenService {
     public ReissueResponse execute(String token) {
         isNotNullRefreshToken(token);
 
-        // 리프레시 토큰에서 프리픽스 제거
         String removePrefixToken = token.replaceFirst(BEARER_PREFIX, "").trim();
         RefreshToken refreshToken = refreshTokenRepository.findByToken(removePrefixToken)
                 .orElseThrow(() -> new GlobalException("존재하지 않는 refresh token 입니다.", HttpStatus.NOT_FOUND));
 
-        // Redis TTL을 사용하여 만료 체크는 생략
         String email = tokenGenerator.getUserIdFromRefreshToken(refreshToken.getToken());
-        isExistsUser(email); // 이메일로 사용자 확인
+        isExistsUser(email);
 
-        // 기존 리프레시 토큰 무효화
         invalidateOldRefreshToken(email);
 
-        // 새로운 액세스 토큰과 리프레시 토큰 생성
         JwtToken jwtToken = tokenGenerator.generateToken(email);
-        saveNewRefreshToken(jwtToken.getRefreshToken(), email); // 새로운 리프레시 토큰 저장
+        saveNewRefreshToken(jwtToken.getRefreshToken(), email);
 
-        // JwtToken을 LoginResponse로 변환하여 반환
         return new ReissueResponse(jwtToken.getAccessToken(), jwtToken.getRefreshToken());
     }
 

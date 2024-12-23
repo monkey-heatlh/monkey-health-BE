@@ -2,6 +2,7 @@ package com.monkey_company.monkey_health.global.security.jwt;
 
 import com.monkey_company.monkey_health.global.security.auth.CustomUserDetailsService;
 import com.monkey_company.monkey_health.global.security.jwt.properties.JwtEnvironment;
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -9,6 +10,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import static com.monkey_company.monkey_health.global.security.jwt.TokenGenerator.getTokenBody;
+import java.util.Date;
 
 @Component
 @RequiredArgsConstructor
@@ -30,5 +32,11 @@ public class TokenParser {
     public String getEmailFromToken(String accessToken) {
         return getAccessTokenSubject(accessToken);
     }
+
+    public Long getExpirationFromToken(String accessToken) {
+        Claims claims = getTokenBody(accessToken, Keys.hmacShaKeyFor(jwtEnv.accessSecret().getBytes()));
+        return claims.getExpiration().getTime();
+    }
+
 
 }

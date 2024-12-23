@@ -6,6 +6,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -18,16 +19,23 @@ import java.io.IOException;
 public class JwtRequestFilter extends OncePerRequestFilter {
 
     private final TokenParser tokenParser;
+    private final RedisTemplate<String, String> redisTemplate;
 
     public static String AUTHORIZATION_HEADER = "Authorization";
     public static String BEARER_PREFIX = "Bearer ";
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+            throws ServletException, IOException {
         String accessToken = request.getHeader(AUTHORIZATION_HEADER);
 
         if (accessToken != null) {
             accessToken = accessToken.replaceFirst(BEARER_PREFIX, "").trim();
+
+            if (isTokenBlacklisted(accessToken)) {
+                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "로그아웃된 토큰입니다.");
+                return;
+            }
 
             UsernamePasswordAuthenticationToken authentication = tokenParser.authenticate(accessToken);
             SecurityContextHolder.clearContext();
@@ -35,5 +43,9 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         }
 
         filterChain.doFilter(request, response);
+    }
+
+    private boolean isTokenBlacklisted(String token) {
+        return redisTemplate.hasKey(token);
     }
 }

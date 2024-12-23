@@ -18,13 +18,11 @@ public class Calendar {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private String email;
+
     @Column(nullable = false)
     private String content;
 
     @Column(nullable = false)
     private LocalDate date;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
-    private CalendarUser user; // 작성자
 }

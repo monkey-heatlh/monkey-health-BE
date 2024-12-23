@@ -8,6 +8,7 @@ import com.monkey_company.monkey_health.domain.auth.dto.response.*;
 import com.monkey_company.monkey_health.domain.auth.service.LoginService;
 import com.monkey_company.monkey_health.domain.auth.service.ReissueTokenService;
 import com.monkey_company.monkey_health.domain.auth.service.VerifyCodeService;
+import com.monkey_company.monkey_health.domain.auth.service.impl.LogoutServiceImpl;
 import com.monkey_company.monkey_health.domain.auth.service.impl.SendMailServiceImpl;
 import com.monkey_company.monkey_health.domain.auth.service.impl.SignUpServiceImpl;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +24,7 @@ public class AuthController {
     private final SendMailServiceImpl sendMailService;
     private final SignUpServiceImpl signUpService;
     private final LoginService loginService;
+    private final LogoutServiceImpl logoutService;
 
 
     @PostMapping("/send-code")
@@ -48,5 +50,10 @@ public class AuthController {
     @PostMapping("/reissue")
     public ReissueResponse reissueToken(@RequestHeader("refresh") String refreshToken) {
         return reissueTokenService.execute(refreshToken);
+    }
+
+    @DeleteMapping("/logout")
+    public LogoutResponse logout(@RequestHeader("Authorization") String token) {
+        return logoutService.logout(token);
     }
 }

@@ -10,7 +10,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import static com.monkey_company.monkey_health.global.security.jwt.TokenGenerator.getTokenBody;
-import java.util.Date;
 
 @Component
 @RequiredArgsConstructor

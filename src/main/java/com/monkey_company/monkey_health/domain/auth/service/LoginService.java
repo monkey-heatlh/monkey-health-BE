@@ -37,14 +37,12 @@ public class LoginService {
 
         JwtToken jwtToken = tokenGenerator.generateToken(member.getEmail());
 
-        // 리프레시 토큰 생성
-        String refreshToken = tokenGenerator.generateRefreshToken(member.getEmail()); // 리프레시 토큰 생성 메서드 예시
+        String refreshToken = tokenGenerator.generateRefreshToken(member.getEmail());
 
-        // 리프레시 토큰 저장
         RefreshToken refreshTokenEntity = RefreshToken.builder()
                 .email(member.getEmail())
                 .token(refreshToken)
-                .ttl(60 * 60 * 24 * 30) // 예: 30일 TTL 설정
+                .ttl(60 * 60 * 24 * 30)
                 .build();
 
         refreshTokenRepository.save(refreshTokenEntity);

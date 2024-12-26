@@ -24,15 +24,4 @@ public class Member {
     @NotBlank
     private String password;
 
-    private String profilePath;
-
-    public void updateProfilePath(String profilePath) {
-        this.profilePath = profilePath;
-    }
-
-    public Member(String email, String password) {
-        this.email = email;
-        this.password = password;
-    }
-
 }

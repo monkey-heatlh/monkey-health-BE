@@ -8,14 +8,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 @RestController
 @RequestMapping("/calendar")
 public interface CalendarRepository extends JpaRepository<Calendar, Long> {
 
-    Optional<Calendar> findByDateAndContent(LocalDate date, String content);
+    List<Calendar> findIdAndContentByDateAndEmail(LocalDate date, String email);
 
-    List<Calendar> findByDateAndEmail(LocalDate date, String email);
+    Calendar findByDateAndIdAndAndEmail(LocalDate date, Long id, String email);
 }

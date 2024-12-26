@@ -1,6 +1,5 @@
 package com.monkey_company.monkey_health.domain.routine.controller;
 
-import com.monkey_company.monkey_health.domain.routine.dto.request.ReadAllRoutineRequest;
 import com.monkey_company.monkey_health.domain.routine.dto.request.SaveRoutineRequest;
 import com.monkey_company.monkey_health.domain.routine.dto.response.ReadAllRoutineResponse;
 import com.monkey_company.monkey_health.domain.routine.dto.response.SaveRoutineResponse;

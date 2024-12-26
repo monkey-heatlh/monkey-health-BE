@@ -1,6 +1,7 @@
 package com.monkey_company.monkey_health.domain.calendar.entity;
 
 import jakarta.persistence.*;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -11,7 +12,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "calendar_events") // 테이블 이름 명시
+@Table(name = "calendar_events")
 public class Calendar {
 
     @Id
@@ -24,5 +25,6 @@ public class Calendar {
     private String content;
 
     @Column(nullable = false)
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate date;
 }

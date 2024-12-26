@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
+@Builder
 public class SaveRoutineRequest {
 
     @JsonProperty("monday_content")

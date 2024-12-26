@@ -6,6 +6,7 @@ import com.monkey_company.monkey_health.domain.routine.entity.Routine;
 import com.monkey_company.monkey_health.domain.routine.repository.RoutineRepository;
 import com.monkey_company.monkey_health.domain.routine.service.SaveRoutineService;
 import com.monkey_company.monkey_health.global.security.jwt.TokenParser;
+import com.monkey_company.monkey_health.global.translation.TranslationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,40 +20,55 @@ public class SaveRoutineServiceImpl implements SaveRoutineService {
 
     private final RoutineRepository routineRepository;
     private final TokenParser tokenParser;
+    private final TranslationService translationService;
 
     @Override
     public SaveRoutineResponse saveRoutine(SaveRoutineRequest request, String token) {
         String email = tokenParser.getEmailFromToken(token);
         Optional<Routine> optionalRoutine = routineRepository.findByEmail(email);
-        checkRoutine(optionalRoutine, request, email);
+        SaveRoutineRequest translatedRequest = translateRequestToEnglish(request);
+        checkRoutine(optionalRoutine, translatedRequest, email);
         return new SaveRoutineResponse("루틴이 저장되었습니다.");
     }
 
     private void checkRoutine(Optional<Routine> routine, SaveRoutineRequest request, String email) {
-        if (routine.isPresent()) {
-            Routine existingRoutine = routine.get();
+        Routine routineToSave = routine.map(existingRoutine ->
+                        updateExistingRoutine(existingRoutine, request))
+                .orElse(createNewRoutine(request, email));
 
-            existingRoutine = existingRoutine.builder()
-                    .email(email)
-                    .mondayContent(request.getMondayContent())
-                    .tuesdayContent(request.getTuesdayContent())
-                    .wednesdayContent(request.getWednesdayContent())
-                    .thursdayContent(request.getThursdayContent())
-                    .fridayContent(request.getFridayContent())
-                    .build();
+        routineRepository.save(routineToSave);
+    }
 
-            routineRepository.save(existingRoutine);
-        } else {
-            Routine newRoutine = Routine.builder()
-                    .email(email)
-                    .mondayContent(request.getMondayContent())
-                    .tuesdayContent(request.getTuesdayContent())
-                    .wednesdayContent(request.getWednesdayContent())
-                    .thursdayContent(request.getThursdayContent())
-                    .fridayContent(request.getFridayContent())
-                    .build();
+    private Routine updateExistingRoutine(Routine routine, SaveRoutineRequest request) {
+        return Routine.builder()
+                .email(routine.getEmail())
+                .mondayContent(request.getMondayContent())
+                .tuesdayContent(request.getTuesdayContent())
+                .wednesdayContent(request.getWednesdayContent())
+                .thursdayContent(request.getThursdayContent())
+                .fridayContent(request.getFridayContent())
+                .build();
+    }
 
-            routineRepository.save(newRoutine);
-        }
+
+    private Routine createNewRoutine(SaveRoutineRequest request, String email) {
+        return Routine.builder()
+                .email(email)
+                .mondayContent(request.getMondayContent())
+                .tuesdayContent(request.getTuesdayContent())
+                .wednesdayContent(request.getWednesdayContent())
+                .thursdayContent(request.getThursdayContent())
+                .fridayContent(request.getFridayContent())
+                .build();
+    }
+
+    private SaveRoutineRequest translateRequestToEnglish(SaveRoutineRequest request) {
+        return SaveRoutineRequest.builder()
+                .mondayContent(translationService.translateToEnglish(request.getMondayContent()))
+                .tuesdayContent(translationService.translateToEnglish(request.getTuesdayContent()))
+                .wednesdayContent(translationService.translateToEnglish(request.getWednesdayContent()))
+                .thursdayContent(translationService.translateToEnglish(request.getThursdayContent()))
+                .fridayContent(translationService.translateToEnglish(request.getFridayContent()))
+                .build();
     }
 }
